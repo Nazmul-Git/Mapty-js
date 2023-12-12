@@ -46,7 +46,13 @@ if (navigator.geolocation) {
         console.log(e);
         const { lat, lng } = e.latlng;
 
-        L.marker([lat, lng]).addTo(map).bindPopup('workout.').openPopup();
+        L.marker([lat, lng]).addTo(map).bindPopup(L.popup({
+          maxWidth:250,
+          minWidth:100,
+          autoClose:false,
+          closeOnClick:false,
+          className:'running-popup',
+        })).setPopupContent('workout').openPopup();
       });
     },
     () => {
