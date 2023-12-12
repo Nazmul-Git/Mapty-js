@@ -21,20 +21,33 @@ if (navigator.geolocation) {
         `https://www.google.com/maps/@${latitude},${longitude},13.15z?entry=ttu`
       );
 
-      const coords=[latitude, longitude];
+      const coords = [latitude, longitude];
 
-    //   L= name space of Leaflet & 'map' is empty div id name
+      //   L= name space of Leaflet & 'map' is empty div id name
       const map = L.map('map').setView(coords, 13);
 
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      // console.log(map);//e {options: {…}, _handlers: Array(7), _layers: {…}, _zoomBoundLayers: {…}, _sizeChanged: false, …}
+
+      // console.log(map.on);
+      /**
+       ƒ (t,e,i){
+        if("object"==typeof t)for(var n in t)this._on(n,t[n],e);
+        else for(var o=0,s=(t=F(t)).length;o<s;o++)this._on(t[o],e,i);
+        return this}
+       */
+
+      L.tileLayer('https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(map);
 
-      L.marker(coords)
-        .addTo(map)
-        .bindPopup('A pretty CSS popup.<br> Easily customizable.')
-        .openPopup();
+      // on() is inside of map values prototype
+      map.on('click', function (e) {
+        console.log(e);
+        const { lat, lng } = e.latlng;
+
+        L.marker([lat, lng]).addTo(map).bindPopup('workout.').openPopup();
+      });
     },
     () => {
       alert('Could not get your position');
