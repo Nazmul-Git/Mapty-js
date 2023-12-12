@@ -44,15 +44,16 @@ if (navigator.geolocation) {
       // on() is inside of map values prototype
       map.on('click', function (e) {
         console.log(e);
-        const { lat, lng } = e.latlng;
+        form.classList.remove('hidden');
 
-        L.marker([lat, lng]).addTo(map).bindPopup(L.popup({
-          maxWidth:250,
-          minWidth:100,
-          autoClose:false,
-          closeOnClick:false,
-          className:'running-popup',
-        })).setPopupContent('workout').openPopup();
+    //     const { lat, lng } = e.latlng;
+    //     L.marker([lat, lng]).addTo(map).bindPopup(L.popup({
+    //       maxWidth:250,
+    //       minWidth:100,
+    //       autoClose:false,
+    //       closeOnClick:false,
+    //       className:'running-popup',
+    //     })).setPopupContent('workout').openPopup();
       });
     },
     () => {
