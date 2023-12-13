@@ -13,82 +13,77 @@ const inputElevation = document.querySelector('.form__input--elevation');
 
 let map, mapE;
 
-class App{
-  constructor(){
-
-  }
-  _getPosition(){}
-
-  _loadMap(){}
-
-  _showForm(){}
-
-  _toggleElevationField(){}
-  
-  _newWorkout(){}
-}
-
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(
-    position => {
-      // console.log(position)
-      const { latitude } = position.coords;
-      const { longitude } = position.coords;
-      console.log(
-        `https://www.google.com/maps/@${latitude},${longitude},13.15z?entry=ttu`
-      );
-
-      const coords = [latitude, longitude];
-
-      //   L= name space of Leaflet & 'map' is empty div id name
-      map = L.map('map').setView(coords, 13);
-
-      // console.log(map);//e {options: {…}, _handlers: Array(7), _layers: {…}, _zoomBoundLayers: {…}, _sizeChanged: false, …}
-
-      // console.log(map.on);
-      /**
-       ƒ (t,e,i){
-        if("object"==typeof t)for(var n in t)this._on(n,t[n],e);
-        else for(var o=0,s=(t=F(t)).length;o<s;o++)this._on(t[o],e,i);
-        return this}
-       */
-
-      L.tileLayer('https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      }).addTo(map);
-
-      // handling click on map 
-      // on() is inside of map values prototype
-      map.on('click', (mapEv)=> {
-        console.log(mapEv);
-        mapE=mapEv;
-        form.classList.remove('hidden');
-        inputDistance.focus();
+class App {
+  constructor() {}
+  _getPosition() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(this._loadMap, ()=>{
+        alert('Could not get your position');
       });
-    },
-    () => {
-      alert('Could not get your position');
     }
-  );
+  }
+
+  _loadMap(position) {
+    // console.log(position)
+    const { latitude } = position.coords;
+    const { longitude } = position.coords;
+    // console.log(
+    //   `https://www.google.com/maps/@${latitude},${longitude},13.15z?entry=ttu`
+    // );
+
+    const coords = [latitude, longitude];
+
+    //   L= name space of Leaflet & 'map' is empty div id name
+    map = L.map('map').setView(coords, 13);
+
+    L.tileLayer('https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
+
+    // handling click on map
+    // on() is inside of map values prototype
+    map.on('click', mapEv => {
+      console.log(mapEv);
+      mapE = mapEv;
+      form.classList.remove('hidden');
+      inputDistance.focus();
+    });
+  }
+
+  _showForm() {}
+
+  _toggleElevationField() {}
+
+  _newWorkout() {}
 }
 
-form.addEventListener('submit', (e)=> {
+form.addEventListener('submit', e => {
   e.preventDefault();
 
   // clear input field
-  inputDistance.value=inputDuration.value=inputCadence.value=inputElevation.value='';
-      const { lat, lng } = mapE.latlng;
-      L.marker([lat, lng]).addTo(map).bindPopup(L.popup({
-        maxWidth:250,
-        minWidth:100,
-        autoClose:false,
-        closeOnClick:false,
-        className:'running-popup',
-      })).setPopupContent('workout').openPopup();
+  inputDistance.value =
+    inputDuration.value =
+    inputCadence.value =
+    inputElevation.value =
+      '';
+  const { lat, lng } = mapE.latlng;
+  L.marker([lat, lng])
+    .addTo(map)
+    .bindPopup(
+      L.popup({
+        maxWidth: 250,
+        minWidth: 100,
+        autoClose: false,
+        closeOnClick: false,
+        className: 'running-popup',
+      })
+    )
+    .setPopupContent('workout')
+    .openPopup();
 });
 
-inputType.addEventListener('change',()=>{
-  inputElevation.closest('.form__row').classList.toggle('form__row--hidden'); 
+inputType.addEventListener('change', () => {
+  inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
   inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
-} )
+});
