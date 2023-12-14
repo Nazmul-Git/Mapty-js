@@ -14,16 +14,23 @@ const inputElevation = document.querySelector('.form__input--elevation');
 let map, mapE;
 
 class App {
-
   #map;
   #mapE;
   constructor() {
     this._getPosition();
 
+    form.addEventListener('submit', this._newWorkout.bind(this));
+
+    inputType.addEventListener('change', () => {
+      inputElevation
+        .closest('.form__row')
+        .classList.toggle('form__row--hidden');
+      inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
+    });
   }
   _getPosition() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(this._loadMap.bind(this), ()=>{
+      navigator.geolocation.getCurrentPosition(this._loadMap.bind(this), () => {
         alert('Could not get your position');
       });
     }
@@ -61,37 +68,31 @@ class App {
 
   _toggleElevationField() {}
 
-  _newWorkout() {}
+  _newWorkout(e) {
+    e.preventDefault();
+    console.log(this);
+
+      // clear input field
+      inputDistance.value =
+        inputDuration.value =
+        inputCadence.value =
+        inputElevation.value =
+          '';
+      const { lat, lng } = mapE.latlng;
+      L.marker([lat, lng])
+        .addTo(this.#map)
+        .bindPopup(
+          L.popup({
+            maxWidth: 250,
+            minWidth: 100,
+            autoClose: false,
+            closeOnClick: false,
+            className: 'running-popup',
+          })
+        )
+        .setPopupContent('workout')
+        .openPopup();
+  }
 }
 
-const app= new App();
-
-form.addEventListener('submit', e => {
-  e.preventDefault();
-
-  // clear input field
-  inputDistance.value =
-    inputDuration.value =
-    inputCadence.value =
-    inputElevation.value =
-      '';
-  const { lat, lng } = mapE.latlng;
-  L.marker([lat, lng])
-    .addTo(map)
-    .bindPopup(
-      L.popup({
-        maxWidth: 250,
-        minWidth: 100,
-        autoClose: false,
-        closeOnClick: false,
-        className: 'running-popup',
-      })
-    )
-    .setPopupContent('workout')
-    .openPopup();
-});
-
-inputType.addEventListener('change', () => {
-  inputElevation.closest('.form__row').classList.toggle('form__row--hidden');
-  inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
-});
+const app = new App();
