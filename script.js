@@ -14,10 +14,16 @@ const inputElevation = document.querySelector('.form__input--elevation');
 let map, mapE;
 
 class App {
-  constructor() {}
+
+  #map;
+  #mapE;
+  constructor() {
+    this._getPosition();
+
+  }
   _getPosition() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(this._loadMap, ()=>{
+      navigator.geolocation.getCurrentPosition(this._loadMap.bind(this), ()=>{
         alert('Could not get your position');
       });
     }
@@ -34,18 +40,18 @@ class App {
     const coords = [latitude, longitude];
 
     //   L= name space of Leaflet & 'map' is empty div id name
-    map = L.map('map').setView(coords, 13);
+    this.#map = L.map('map').setView(coords, 13);
 
     L.tileLayer('https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(map);
+    }).addTo(this.#map);
 
     // handling click on map
     // on() is inside of map values prototype
-    map.on('click', mapEv => {
+    this.#map.on('click', mapEv => {
       console.log(mapEv);
-      mapE = mapEv;
+      this.#mapE = mapEv;
       form.classList.remove('hidden');
       inputDistance.focus();
     });
@@ -57,6 +63,8 @@ class App {
 
   _newWorkout() {}
 }
+
+const app= new App();
 
 form.addEventListener('submit', e => {
   e.preventDefault();
