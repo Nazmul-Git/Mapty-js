@@ -77,7 +77,7 @@ class App {
         inputCadence.value =
         inputElevation.value =
           '';
-      const { lat, lng } = mapE.latlng;
+      const { lat, lng } = this.#mapE.latlng;
       L.marker([lat, lng])
         .addTo(this.#map)
         .bindPopup(
