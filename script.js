@@ -21,13 +21,10 @@ class App {
 
     form.addEventListener('submit', this._newWorkout.bind(this));
 
-    inputType.addEventListener('change', () => {
-      inputElevation
-        .closest('.form__row')
-        .classList.toggle('form__row--hidden');
-      inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
-    });
+    inputType.addEventListener('change', this._toggleElevationField.bind(this));
   }
+
+  
   _getPosition() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(this._loadMap.bind(this), () => {
@@ -65,7 +62,12 @@ class App {
       inputDistance.focus();
   }
 
-  _toggleElevationField() {}
+  _toggleElevationField() {
+    inputElevation
+        .closest('.form__row')
+        .classList.toggle('form__row--hidden');
+      inputCadence.closest('.form__row').classList.toggle('form__row--hidden');
+  }
 
   _newWorkout(e) {
     e.preventDefault();
