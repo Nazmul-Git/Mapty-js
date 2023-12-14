@@ -11,7 +11,20 @@ const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 
-let map, mapE;
+// let map, mapE;
+
+class Workout {
+  date= new Date();
+  id= (new Date()+''.slice(-10));
+  constructor(coords, distance,duration){
+    this.coords=coords;
+    this.distance=distance; //km
+    this.duration=duration; //min
+  }
+}
+
+class Running extends Workout{}
+class Cycling extends Workout{}
 
 class App {
   #map;
@@ -24,7 +37,7 @@ class App {
     inputType.addEventListener('change', this._toggleElevationField.bind(this));
   }
 
-  
+
   _getPosition() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(this._loadMap.bind(this), () => {
