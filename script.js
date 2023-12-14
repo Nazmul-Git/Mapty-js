@@ -56,15 +56,14 @@ class App {
 
     // handling click on map
     // on() is inside of map values prototype
-    this.#map.on('click', mapEv => {
-      console.log(mapEv);
-      this.#mapE = mapEv;
-      form.classList.remove('hidden');
-      inputDistance.focus();
-    });
+    this.#map.on('click', this._showForm.bind(this));
   }
 
-  _showForm() {}
+  _showForm(mapEv) {
+    this.#mapE = mapEv;
+      form.classList.remove('hidden');
+      inputDistance.focus();
+  }
 
   _toggleElevationField() {}
 
@@ -96,3 +95,4 @@ class App {
 }
 
 const app = new App();
+console.log(app);
