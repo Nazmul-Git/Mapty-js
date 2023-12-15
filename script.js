@@ -71,7 +71,7 @@ const inputElevation = document.querySelector('.form__input--elevation');
 
 class App {
   #map;
-  #mapZoom= 13;
+  #mapZoom = 13;
   #mapE;
   #workout = [];
 
@@ -127,9 +127,9 @@ class App {
       inputCadence.value =
       inputElevation.value =
         '';
-    form.style.display= 'none';
+    form.style.display = 'none';
     form.classList.add('hidden');
-    setTimeout(()=>form.style.display= 'grid', 1000)
+    setTimeout(() => (form.style.display = 'grid'), 1000);
   }
 
   _toggleElevationField() {
@@ -189,7 +189,11 @@ class App {
 
     // clear input field
     this._hideForm();
+
+    // 
+    this._setLocalStorage();
   }
+
   _renderWorkoutMarker(workout) {
     L.marker(workout.coords)
       .addTo(this.#map)
@@ -202,7 +206,9 @@ class App {
           className: `${workout.type}-popup`,
         })
       )
-      .setPopupContent(`${workout.type==='running'? '🏃‍♂️':''} ${workout.description}`)
+      .setPopupContent(
+        `${workout.type === 'running' ? '🏃‍♂️' : ''} ${workout.description}`
+      )
       .openPopup();
   }
 
@@ -257,20 +263,27 @@ class App {
     form.insertAdjacentHTML('afterend', html);
   }
 
-  _moveToPopup(e){
-    const workoutEl=e.target.closest('.workout');
+  _moveToPopup(e) {
+    const workoutEl = e.target.closest('.workout');
     console.log(workoutEl);
 
-    if(!workoutEl) return;
+    if (!workoutEl) return;
 
-    const workout= this.#workout.find(work=>work.id === workoutEl.dataset.id);
+    const workout = this.#workout.find(
+      work => work.id === workoutEl.dataset.id
+    );
     console.log(workout);
     this.#map.setView(workout.coords, this.#mapZoom, {
-      animate:true,
+      animate: true,
       pan: {
-        duration:1
-      }
-    })
+        duration: 1,
+      },
+    });
+  }
+
+  // set data local storage
+  _setLocalStorage() {
+    localStorage.setItem('workout', JSON.stringify(this.#workout));
   }
 }
 
